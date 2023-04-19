@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Food {
 
+
     private Long foodId; // 음식 id
     private String foodName; // 음식 이름
     private String foodPrice; // 음식 가격
