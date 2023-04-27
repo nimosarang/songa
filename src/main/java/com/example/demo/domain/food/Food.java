@@ -1,6 +1,7 @@
 package com.example.demo.domain.food;
 
 import com.example.demo.dto.food.request.FoodCreateRequest;
+import com.example.demo.dto.food.request.FoodUpdateRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,14 +36,17 @@ public class Food {
     @Column(nullable = false)
     private LocalDateTime foodCreatedAt;  // 생성일
 
+    @Column(nullable = true)
+    private LocalDateTime foodUpdatedAt;  // 수정일
+
     public Food(FoodCreateRequest request) {
 
         if (request.getFoodName() == null || request.getFoodName().isBlank()) {
-            throw new IllegalArgumentException("음식 이름은 필.수.입니다요?");
+            throw new IllegalArgumentException("음식 이름은 필수! 입니다");
         }
 
         if (request.getFoodPrice() == null || request.getFoodPrice().isBlank()) {
-            throw new IllegalArgumentException("음식 가격도 필.수.입니다요?");
+            throw new IllegalArgumentException("음식 가격은 필수! 입니다");
         }
 
         this.foodName = request.getFoodName();
@@ -55,4 +59,24 @@ public class Food {
         this.foodCreatedAt = LocalDateTime.now();
     }
 
+
+    public void updateFood(FoodUpdateRequest request) {
+
+            if (request.getFoodName() == null || request.getFoodName().isBlank()) {
+                throw new IllegalArgumentException("음식 이름은 필수! 입니다");
+            }
+
+            if (request.getFoodPrice() == null || request.getFoodPrice().isBlank()) {
+                throw new IllegalArgumentException("음식 가격은 필수! 입니다");
+            }
+
+            this.foodName = request.getFoodName();
+            this.foodPrice = request.getFoodPrice();
+            this.foodDescription = request.getFoodDescription();
+            this.foodCalorie = request.getFoodCalorie();
+            this.foodIngredient = request.getFoodIngredient();
+            this.foodCategory = request.getFoodCategory();
+            this.foodImageUrl = request.getFoodImageUrl();
+            this.foodUpdatedAt = LocalDateTime.now();
+    }
 }
