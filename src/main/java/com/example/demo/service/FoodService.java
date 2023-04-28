@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.food.Food;
 import com.example.demo.dto.food.request.FoodCreateRequest;
+import com.example.demo.dto.food.request.FoodUpdateRequest;
 import com.example.demo.dto.food.response.FoodResponse;
 import com.example.demo.repository.FoodRepository;
 import java.util.List;
@@ -17,9 +18,6 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
-    //    public List<Food> getFoods() {
-//        return foodRepository.findAll();
-//    }
     public List<FoodResponse> getFoods() {
         return foodRepository.findAll().stream()
             .map(FoodResponse::new)
@@ -28,6 +26,21 @@ public class FoodService {
 
     public void saveFood(FoodCreateRequest request) {
         foodRepository.save(new Food(request));
+    }
+
+    public FoodResponse getFoodById(Long id) {
+        return new FoodResponse(foodRepository.findById(id).orElseThrow(IllegalArgumentException::new));
+    }
+
+    public void updateFoodById(long id, FoodUpdateRequest request) {
+        Food food = foodRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        food.updateFood(request);
+        foodRepository.save(food);
+    }
+
+    public void deleteFoodById(Long id) {
+        Food food = foodRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        foodRepository.delete(food);
     }
 
 
