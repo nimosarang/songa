@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.food.Food;
-import com.example.demo.dto.food.request.FoodCreateRequest;
-import com.example.demo.dto.food.request.FoodUpdateRequest;
+import com.example.demo.dto.food.request.FoodRequest.CreateFoodRequest;
+import com.example.demo.dto.food.request.FoodRequest.UpdateFoodRequest;
 import com.example.demo.dto.food.response.FoodResponse;
+import com.example.demo.exception.FoodNotFoundException;
 import com.example.demo.repository.FoodRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,26 +25,29 @@ public class FoodService {
             .collect(Collectors.toList());
     }
 
-    public void saveFood(FoodCreateRequest request) {
-        foodRepository.save(new Food(request));
+    public FoodResponse saveFood(CreateFoodRequest request) {
+        Food saveFood = foodRepository.save(new Food(request));
+        return new FoodResponse(saveFood);
     }
 
-    public FoodResponse getFoodById(Long id) {
-        return new FoodResponse(foodRepository.findById(id).orElseThrow(IllegalArgumentException::new));
+    public FoodResponse getFood(Long foodId) {
+        Food food = foodRepository.findById(foodId)
+            .orElseThrow(FoodNotFoundException::new);
+        return new FoodResponse(food);
     }
 
-    public void updateFoodById(long id, FoodUpdateRequest request) {
-        Food food = foodRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public void updateFood(Long foodId, UpdateFoodRequest request) {
+        Food food = foodRepository.findById(foodId)
+            .orElseThrow(FoodNotFoundException::new);
         food.updateFood(request);
         foodRepository.save(food);
     }
 
-    public void deleteFoodById(Long id) {
-        Food food = foodRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public void deleteFood(Long foodId) {
+        Food food = foodRepository.findById(foodId)
+            .orElseThrow(FoodNotFoundException::new);
         foodRepository.delete(food);
     }
-
-
 }
 
 

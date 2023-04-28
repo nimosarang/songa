@@ -16,6 +16,8 @@ public class FoodResponse {
     private String foodCategory;
     private String foodImageUrl;
     private LocalDateTime foodCreatedAt;
+    public FoodResponse() {
+    }
 
     public FoodResponse(Food food){
         this.foodId = food.getFoodId();
@@ -27,6 +29,10 @@ public class FoodResponse {
         this.foodCategory = food.getFoodCategory();
         this.foodImageUrl = food.getFoodImageUrl();
         this.foodCreatedAt = food.getFoodCreatedAt();
+    }
+
+    public static class UpdateFoodResponse extends FoodResponse {
+
     }
 
 }
