@@ -1,9 +1,9 @@
-package com.example.demo.controller;
+package com.example.demo.controller.food;
 
 import com.example.demo.dto.food.request.FoodRequest.CreateFoodRequest;
 import com.example.demo.dto.food.request.FoodRequest.UpdateFoodRequest;
 import com.example.demo.dto.food.response.FoodResponse;
-import com.example.demo.service.FoodService;
+import com.example.demo.service.food.FoodService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,7 +56,4 @@ public class FoodController {
         return ResponseEntity.noContent().build();
         //noContent()는 204 No Content 상태 코드를 포함하는 응답 객체를 생성하는 메서드.
     }
-
-
-
 }

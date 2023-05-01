@@ -1,16 +1,22 @@
 package com.example.demo.domain.food;
 
+import com.example.demo.domain.order.OrderItem;
 import com.example.demo.dto.food.request.FoodRequest;
-import com.example.demo.dto.food.request.FoodRequest.CreateFoodRequest;
 import com.example.demo.dto.food.request.FoodRequest.UpdateFoodRequest;
-import com.example.demo.exception.FoodValidationException;
+import com.example.demo.exception.food.FoodValidationException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,8 +32,8 @@ public class Food {
     @Column(nullable = false, length = 20)
     private String foodName; // 음식 이름
 
-    @Column(nullable = false, length = 10)
-    private String foodPrice; // 음식 가격
+    @Column(nullable = false)
+    private int foodPrice; // 음식 가격
 
     private String foodDescription; // 음식 설명
     private String foodCalorie; // 칼로리
@@ -38,14 +44,17 @@ public class Food {
     private LocalDateTime foodCreatedAt;  // 생성일
     private LocalDateTime foodUpdatedAt;  // 수정일
 
-    public Food(CreateFoodRequest request) {
-        FoodNameAndPriceValidate(request);
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>(); // 주문한 항목들
+
+    public Food(FoodRequest request) {
+        validateFoodNameAndPrice(request);
         assignFood(request);
         addFoodCreatedAt();
     }
 
     public void updateFood(UpdateFoodRequest request) {
-        FoodNameAndPriceValidate(request);
+        validateFoodNameAndPrice(request);
         assignFood(request);
         addFoodUpdatedAt();
     }
@@ -68,17 +77,13 @@ public class Food {
         foodUpdatedAt = LocalDateTime.now();
     }
 
-
-    public void FoodNameAndPriceValidate(FoodRequest request) {
+    public void validateFoodNameAndPrice(FoodRequest request) {
         if (request.getFoodName() == null || request.getFoodName().isBlank()) {
             throw new FoodValidationException("음식 이름은 필수! 입니다.");
         }
 
-        if (request.getFoodPrice() == null || request.getFoodPrice().isBlank()) {
-            throw new FoodValidationException("음식 가격은 필수! 입니다.");
+        if (request.getFoodPrice() == 0) {
+            throw new FoodValidationException("음식 가격은 0보다 커야 합니다!");
         }
     }
-
-
-
 }

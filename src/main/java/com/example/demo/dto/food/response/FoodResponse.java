@@ -9,7 +9,7 @@ public class FoodResponse {
 
     private long foodId;
     private String foodName;
-    private String foodPrice;
+    private int foodPrice;
     private String foodDescription;
     private String foodCalorie;
     private String foodIngredient;
