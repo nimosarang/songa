@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package com.example.demo.exception.food;
 
 public class FoodNotFoundException extends RuntimeException {
     public FoodNotFoundException(String message) {
